@@ -45,7 +45,7 @@ public class DbHelper extends SQLiteOpenHelper {
             "INSERT INTO " + TBL_NAME + " (" + KEY_NAME + "," +  KEY_IMAGE
                     + "," + KEY_PHONE + "," + KEY_EMAIL + "," + KEY_STATUS + "," + KEY_ADDRESS
                     + "," + KEY_BIRTH_DATE + "," + KEY_SOCIAL_MEDIA + ") "
-                    + "VALUES('izzan',null,'081382635503',null,null,null,null,null);";
+                    + "VALUES('izzan',null,'6281382635503',null,null,null,null,null);";
 
     public DbHelper(Context context)
     {

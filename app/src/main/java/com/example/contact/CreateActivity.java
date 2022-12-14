@@ -109,7 +109,7 @@ public class CreateActivity extends AppCompatActivity {
         if (phoneNumber.isEmpty()) {
             edtPhoneNumber.setError("Phone Number must be filled.");
             return false;
-        }else if(!phoneNumber.matches("^(0|62)[0-9]{10,11}$")){
+        }else if(!phoneNumber.matches("^(62)[0-9]{11}$")){
             edtPhoneNumber.setError("Phone Number must be valid.");
             return false;
         }
@@ -159,7 +159,7 @@ public class CreateActivity extends AppCompatActivity {
 
         byte[] bytesResult = null;
         ByteArrayOutputStream byteBuffer = new ByteArrayOutputStream();
-        int bufferSize = 1024;
+        int bufferSize = 2048;
         byte[] buffer = new byte[bufferSize];
         try {
             int len;

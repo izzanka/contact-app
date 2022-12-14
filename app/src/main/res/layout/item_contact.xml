@@ -19,7 +19,7 @@
         <RelativeLayout
             android:id="@+id/box"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="212dp"
             android:orientation="vertical"
             android:padding="16dp">
 
@@ -73,19 +73,36 @@
                     android:layout_height="50dp"
                     android:layout_marginStart="8dp"
                     android:layout_weight="1"
-                    android:drawableLeft="@android:drawable/ic_dialog_email"
-                    android:text="Msg" />
+                    android:drawableLeft="@android:drawable/stat_notify_chat"
+                    android:text="Message" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="337dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_phone_number"
+                android:layout_marginTop="80dp"
+                android:orientation="horizontal">
 
                 <Button
                     android:id="@+id/btn_wa"
                     android:layout_width="wrap_content"
                     android:layout_height="50dp"
-                    android:layout_marginStart="8dp"
                     android:layout_weight="1"
                     android:drawableLeft="@android:drawable/sym_action_call"
-                    android:text="Wa" />
+                    android:text="Whatsapp" />
 
+                <Button
+                    android:id="@+id/btn_mail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_weight="1"
+                    android:drawableLeft="@android:drawable/sym_action_email"
+                    android:text="Email" />
             </LinearLayout>
+
 
         </RelativeLayout>
     </androidx.cardview.widget.CardView>

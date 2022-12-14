@@ -16,6 +16,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.contact.R;
@@ -71,6 +73,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
     public void onBindViewHolder(@NonNull ContactViewHolder holder, int position)
     {
         String phone_number = contactArrayList.get(position).getPhone_number();
+        String email = contactArrayList.get(position).getEmail();
         byte[] bytes = contactArrayList.get(position).getImage();
 
         if(bytes != null)
@@ -128,6 +131,53 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
 
             }
         });
+
+        holder.btnWa.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String url = "https://api.whatsapp.com/send?phone=" + phone_number + "&text=" +
+                        Uri.parse("");
+                Intent waIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                waIntent.setPackage("com.whatsapp");
+                waIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                try{
+                    activity.startActivity(waIntent);
+                }catch (android.content.ActivityNotFoundException e){
+                    Toast.makeText(activity, "Whatsapp is not installed.", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        holder.btnEmail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(!email.isEmpty()){
+                    String[] TO = {email};
+                    String[] CC = {""};
+                    Intent emailIntent = new Intent(Intent.ACTION_SEND);
+
+                    emailIntent.setData(Uri.parse("mailto:"));
+                    emailIntent.setType("text/plain");
+                    emailIntent.putExtra(Intent.EXTRA_EMAIL, TO);
+                    emailIntent.putExtra(Intent.EXTRA_CC, CC);
+                    emailIntent.putExtra(Intent.EXTRA_SUBJECT, "");
+                    emailIntent.putExtra(Intent.EXTRA_TEXT, "");
+
+                    try{
+                        activity.startActivity(Intent.createChooser(emailIntent,""));
+                    }catch (android.content.ActivityNotFoundException e){
+                        Toast.makeText(activity, "Email client is not installed.", Toast.LENGTH_SHORT).show();
+                    }
+                }else{
+                    Toast.makeText(activity, "This contact does not have an email.", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        });
+
+
+
     }
 
     public void sendMessage(String phone_number)
@@ -176,7 +226,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
     {
         TextView tvName, tvPhone;
         RelativeLayout layout;
-        Button btnCall, btnMsg;
+        Button btnCall, btnMsg, btnWa, btnEmail;
         ImageView imageView;
 
         public ContactViewHolder(View view)
@@ -188,6 +238,8 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
             layout = view.findViewById(R.id.box);
             btnCall = view.findViewById(R.id.btn_call);
             btnMsg = view.findViewById(R.id.btn_msg);
+            btnWa = view.findViewById(R.id.btn_wa);
+            btnEmail = view.findViewById(R.id.btn_mail);
         }
     }
 
