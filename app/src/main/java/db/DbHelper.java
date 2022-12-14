@@ -29,8 +29,6 @@ public class DbHelper extends SQLiteOpenHelper {
     private static final String KEY_BIRTH_DATE = "birth_date";
     private static final String KEY_SOCIAL_MEDIA = "social_media";
 
-    ArrayList images = new ArrayList<>();
-
     private static final String CREATE_TABLE_CONTACTS =
             "CREATE TABLE " + TBL_NAME + "("
                     + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
@@ -47,7 +45,7 @@ public class DbHelper extends SQLiteOpenHelper {
             "INSERT INTO " + TBL_NAME + " (" + KEY_NAME + "," +  KEY_IMAGE
                     + "," + KEY_PHONE + "," + KEY_EMAIL + "," + KEY_STATUS + "," + KEY_ADDRESS
                     + "," + KEY_BIRTH_DATE + "," + KEY_SOCIAL_MEDIA + ") "
-                    + "VALUES('izzan',null,'34567890',null,null,null,null,null);";
+                    + "VALUES('izzan',null,'081382635503',null,null,null,null,null);";
 
     public DbHelper(Context context)
     {
@@ -72,7 +70,7 @@ public class DbHelper extends SQLiteOpenHelper {
     public ArrayList<Contact> getAll()
     {
         ArrayList<Contact> contactArrayList = new ArrayList<>();
-        String q = "SELECT * FROM " + TBL_NAME + " ORDER BY id DESC";
+        String q = "SELECT * FROM " + TBL_NAME + " ORDER BY name ASC";
         SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
         Cursor cursor = sqLiteDatabase.rawQuery(q, null);
 
@@ -91,6 +89,30 @@ public class DbHelper extends SQLiteOpenHelper {
                 contact.setSocial_media(cursor.getString(cursor.getColumnIndex(KEY_SOCIAL_MEDIA)));
                 contactArrayList.add(contact);
             } while(cursor.moveToNext());
+        }
+
+        return contactArrayList;
+    }
+
+    @SuppressLint("Range")
+    public ArrayList<Contact> search(String keyword)
+    {
+        ArrayList<Contact> contactArrayList = new ArrayList<>();
+
+        try{
+            SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
+            Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM " + TBL_NAME + " where " + KEY_NAME + " like ?", new String[] { "%" + keyword + "%" });
+            if(cursor.moveToFirst()){
+                do{
+                    Contact contact = new Contact();
+                    contact.setId(cursor.getInt(cursor.getColumnIndex(KEY_ID)));
+                    contact.setName(cursor.getString(cursor.getColumnIndex(KEY_NAME)));
+                    contact.setPhone_number(cursor.getString(cursor.getColumnIndex(KEY_PHONE)));
+                    contactArrayList.add(contact);
+                } while(cursor.moveToNext());
+            }
+        }catch (Exception e){
+            contactArrayList = null;
         }
 
         return contactArrayList;

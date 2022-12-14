@@ -144,25 +144,14 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
     }
 
     private void showSettingsDialog() {
-        // we are displaying an alert dialog for permissions
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-
-        // below line is the title
-        // for our alert dialog.
         builder.setTitle("Need Permissions");
 
-        // below line is our message for our dialog
         builder.setMessage("This app needs permission to use this feature. You can grant them in app settings.");
         builder.setPositiveButton("GOTO SETTINGS", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                // this method is called on click on positive
-                // button and on clicking shit button we
-                // are redirecting our user from our app to the
-                // settings page of our app.
                 dialog.cancel();
-                // below is the intent from which we
-                // are redirecting our user.
                 Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
                 Uri uri = Uri.fromParts("package", activity.getPackageName(), null);
                 intent.setData(uri);
@@ -172,13 +161,9 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                // this method is called when
-                // user click on negative button.
                 dialog.cancel();
             }
         });
-        // below line is used
-        // to display our dialog
         builder.show();
     }
 

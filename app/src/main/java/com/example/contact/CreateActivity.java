@@ -8,6 +8,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.telephony.PhoneNumberUtils;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,6 +19,7 @@ import com.google.android.material.snackbar.Snackbar;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.regex.Pattern;
 
 import db.DbHelper;
 
@@ -58,27 +61,25 @@ public class CreateActivity extends AppCompatActivity {
                 String birth_date = edtBirthDate.getText().toString();
                 String social_media = edtSocialMedia.getText().toString();
 
-                if(name.isEmpty()){
-                    Snackbar.make(view, "Name must be filled.", Snackbar.LENGTH_SHORT).show();
-                }else if(phone_number.isEmpty()){
-                    Snackbar.make(view, "Phone Number must be filled.", Snackbar.LENGTH_SHORT).show();
-                }else{
-                    try{
-                        if(imageUri != null){
-                            bytes = getBytes(CreateActivity.this, imageUri);
-                        }
+                if(!validateName(name) || !validatePhoneNumber(phone_number) || !validateEmail(email)){
+                    return;
+                }
 
-                        dbHelper.store(name, phone_number, email, bytes, status, address, birth_date, social_media);
-
-                        Toast.makeText(getApplicationContext(), "Contact created successfully.", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(CreateActivity.this, MainActivity.class);
-                        startActivity(intent);
-
-                    }catch(Exception e){
-                        Toast.makeText(getApplicationContext(), "Error: " + e, Toast.LENGTH_SHORT).show();
+                try{
+                    if(imageUri != null){
+                        bytes = getBytes(CreateActivity.this, imageUri);
                     }
 
+                    dbHelper.store(name, phone_number, email, bytes, status, address, birth_date, social_media);
+
+                    Toast.makeText(getApplicationContext(), "Contact created successfully.", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(CreateActivity.this, MainActivity.class);
+                    startActivity(intent);
+
+                }catch(Exception e){
+                    Toast.makeText(getApplicationContext(), "Error: " + e, Toast.LENGTH_SHORT).show();
                 }
+
             }
         });
 
@@ -88,6 +89,49 @@ public class CreateActivity extends AppCompatActivity {
                 chooseImage();
             }
         });
+    }
+
+    public boolean validateName(String name)
+    {
+        if(name.isEmpty()){
+            edtName.setError("Name must be filled.");
+            return false;
+        }else if(!name.matches("[A-Za-z]+( [A-Za-z]+)*$")){
+            edtName.setError("Name must be valid.");
+            return false;
+        }else{
+            return true;
+        }
+    }
+
+    public boolean validatePhoneNumber(String phoneNumber) {
+
+        if (phoneNumber.isEmpty()) {
+            edtPhoneNumber.setError("Phone Number must be filled.");
+            return false;
+        }else if(!phoneNumber.matches("^(0|62)[0-9]{10,11}$")){
+            edtPhoneNumber.setError("Phone Number must be valid.");
+            return false;
+        }
+        else {
+            return true;
+        }
+
+    }
+
+    public boolean validateEmail(String email)
+    {
+        if(!email.isEmpty()){
+            if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
+                edtEmail.setError("Email must be valid.");
+                return false;
+            }else{
+                return true;
+            }
+        }else{
+            return true;
+        }
+
     }
 
     public void chooseImage()

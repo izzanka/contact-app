@@ -32,8 +32,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Name"
-            android:inputType="textPersonName|textEmailAddress"
-            android:maxLines="1" />
+            android:inputType="textPersonName"
+            android:maxLines="1"
+            android:maxLength="20"
+            />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -45,8 +47,9 @@
             android:id="@+id/edt_phone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:maxLength="12"
             android:hint="Phone Number"
-            android:inputType="textCapSentences|phone"
+            android:inputType="phone"
             android:maxLines="1" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -62,7 +65,14 @@
             android:hint="Email"
             android:inputType="textEmailSubject"
             android:maxLines="1" />
+
     </com.google.android.material.textfield.TextInputLayout>
+
+    <Spinner
+        android:id="@+id/spinner2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
@@ -76,6 +86,7 @@
             android:hint="Status"
             android:inputType="textShortMessage"
             android:maxLines="1" />
+
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout

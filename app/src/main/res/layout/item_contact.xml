@@ -19,7 +19,7 @@
         <RelativeLayout
             android:id="@+id/box"
             android:layout_width="match_parent"
-            android:layout_height="150dp"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="16dp">
 
@@ -53,30 +53,41 @@
                 android:textSize="18sp" />
 
             <LinearLayout
+                android:layout_width="337dp"
+                android:layout_height="wrap_content"
                 android:layout_below="@+id/tv_phone_number"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:layout_marginTop="20dp">
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal">
 
                 <Button
                     android:id="@+id/btn_call"
-                    android:drawableLeft="@android:drawable/ic_menu_call"
                     android:layout_width="wrap_content"
                     android:layout_height="50dp"
                     android:layout_weight="1"
+                    android:drawableLeft="@android:drawable/ic_menu_call"
                     android:text="Call" />
 
                 <Button
                     android:id="@+id/btn_msg"
-                    android:drawableLeft="@android:drawable/ic_dialog_email"
                     android:layout_width="wrap_content"
                     android:layout_height="50dp"
                     android:layout_marginStart="8dp"
                     android:layout_weight="1"
-                    android:text="Message" />
+                    android:drawableLeft="@android:drawable/ic_dialog_email"
+                    android:text="Msg" />
+
+                <Button
+                    android:id="@+id/btn_wa"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_weight="1"
+                    android:drawableLeft="@android:drawable/sym_action_call"
+                    android:text="Wa" />
+
             </LinearLayout>
 
         </RelativeLayout>
     </androidx.cardview.widget.CardView>
+
 </LinearLayout>
