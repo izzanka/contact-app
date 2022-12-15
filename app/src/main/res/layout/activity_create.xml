@@ -48,7 +48,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:maxLength="13"
-            android:hint="Phone Number"
+            android:hint="Phone Number (62)"
             android:inputType="phone"
             android:maxLines="1" />
     </com.google.android.material.textfield.TextInputLayout>
@@ -73,13 +73,19 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp">
 
-        <EditText
-            android:id="@+id/edt_status"
+        <Spinner
+            android:id="@+id/spinner_status"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Status"
-            android:inputType="textShortMessage"
-            android:maxLines="1" />
+            android:layout_weight="1" />
+
+<!--        <EditText-->
+<!--            android:id="@+id/edt_status"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:hint="Status"-->
+<!--            android:inputType="textShortMessage"-->
+<!--            android:maxLines="1" />-->
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -95,6 +101,7 @@
             android:hint="Address"
             android:inputType="textLongMessage"
             android:maxLines="1" />
+
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -102,13 +109,21 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp">
 
-        <EditText
-            android:id="@+id/edt_birth_date"
+<!--        <EditText-->
+<!--            android:id="@+id/edt_birth_date"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:hint="Birth Date"-->
+<!--            android:inputType="date"-->
+<!--            android:maxLines="1" />-->
+
+
+        <Spinner
+            android:id="@+id/spinner_sosmed"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Birth Date"
-            android:inputType="date"
-            android:maxLines="1" />
+            android:layout_weight="1" />
+
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -120,8 +135,8 @@
             android:id="@+id/edt_social_media"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Social Media"
-            android:inputType="textCapSentences|textEmailSubject"
+            android:hint="Username of selected social media"
+            android:inputType="text"
             android:maxLines="1" />
     </com.google.android.material.textfield.TextInputLayout>
 

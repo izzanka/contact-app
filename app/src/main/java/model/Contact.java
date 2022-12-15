@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 public class Contact implements Serializable {
     private int id;
-    private String name, phone_number, email, status, address, birth_date, social_media;
+    private String name, phone_number, email, status, address, birth_date, social_media, username;
     private byte[] image;
 
     public Contact() { }
@@ -16,6 +16,14 @@ public class Contact implements Serializable {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getName() {

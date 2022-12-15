@@ -15,9 +15,12 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Patterns;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -25,22 +28,27 @@ import com.google.android.material.snackbar.Snackbar;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.regex.Pattern;
 
 import db.DbHelper;
 import model.Contact;
 
-public class EditActivity extends AppCompatActivity
+public class EditActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener
 {
     private DbHelper dbHelper;
     private EditText etName, etPhone, etEmail, etStatus, etAddress, etBirthDate, etSocialMedia;
     private Button btnUpdate, btnDelete;
     private ImageView imageView;
     private Contact contact;
+    private Spinner sStatus, sSosmed;
     Uri imageUri = null;
     byte[] imageBytes = null;
     byte[] bytes = null;
     int id;
+    String status;
+    String sosmed;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -53,10 +61,11 @@ public class EditActivity extends AppCompatActivity
         etName = findViewById(R.id.edt_name);
         etPhone = findViewById(R.id.edt_phone);
         etEmail = findViewById(R.id.edt_email);
-        etStatus = findViewById(R.id.edt_status);
+//        etStatus = findViewById(R.id.edt_status);
         etAddress = findViewById(R.id.edt_address);
-        etBirthDate = findViewById(R.id.edt_birth_date);
+//        etBirthDate = findViewById(R.id.edt_birth_date);
         etSocialMedia = findViewById(R.id.edt_social_media);
+
 
         btnUpdate = findViewById(R.id.btn_submit);
         btnDelete = findViewById(R.id.btn_delete);
@@ -71,12 +80,23 @@ public class EditActivity extends AppCompatActivity
         etName.setText(contact.getName());
         etPhone.setText(contact.getPhone_number());
         etEmail.setText(contact.getEmail());
-        etStatus.setText(contact.getStatus());
+//        etStatus.setText(contact.getStatus());
         etAddress.setText(contact.getAddress());
-        etBirthDate.setText(contact.getBirth_date());
-        etSocialMedia.setText(contact.getSocial_media());
+//        etBirthDate.setText(contact.getBirth_date());
+        etSocialMedia.setText(contact.getUsername());
 
         id = contact.getId();
+
+        sStatus = findViewById(R.id.s_status);
+        status = contact.getStatus();
+        sStatus.setOnItemSelectedListener(this);
+        loadSpinnerStatusData();
+
+        sSosmed = findViewById(R.id.spinner_sosmed);
+        sosmed = contact.getSocial_media();
+        System.out.println(sosmed);
+        sSosmed.setOnItemSelectedListener(new SosmedSpinner());
+        loadSpinnerSosmedData();
 
         if(bytes != null)
         {
@@ -90,9 +110,9 @@ public class EditActivity extends AppCompatActivity
                 String name = etName.getText().toString();
                 String phone_number = etPhone.getText().toString();
                 String email = etEmail.getText().toString();
-                String status = etStatus.getText().toString();
+//                String status = etStatus.getText().toString();
                 String address = etAddress.getText().toString();
-                String birth_date = etBirthDate.getText().toString();
+//                String birth_date = etBirthDate.getText().toString();
                 String social_media = etSocialMedia.getText().toString();
 
                 if(!validateName(name) || !validatePhoneNumber(phone_number) || !validateEmail(email)){
@@ -107,7 +127,7 @@ public class EditActivity extends AppCompatActivity
                         imageBytes = bytes;
                     }
 
-                    dbHelper.update(id, name, phone_number, email, imageBytes, status, address, birth_date, social_media);
+                    dbHelper.update(id, name, phone_number, email, imageBytes, status, address, null, sosmed, social_media);
                     Toast.makeText(getApplicationContext(), "Contact updated successfully.", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(EditActivity.this, MainActivity.class);
                     startActivity(intent);
@@ -186,7 +206,53 @@ public class EditActivity extends AppCompatActivity
 
     }
 
+    public void loadSpinnerStatusData()
+    {
 
+        ArrayList labels = new ArrayList();
+        labels.add("Select status:");
+        labels.add("Family");
+        labels.add("Friend");
+        labels.add("Colleague");
+        labels.add("Company");
+        labels.add("Other");
+
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, labels);
+
+        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        sStatus.setAdapter(arrayAdapter);
+
+        if(status != null){
+
+            int spinnerPosition = arrayAdapter.getPosition(status);
+
+            sStatus.setSelection(spinnerPosition);
+         }
+
+    }
+
+    public void loadSpinnerSosmedData()
+    {
+        ArrayList labelsSosmed = new ArrayList();
+        labelsSosmed.add("Select social media:");
+        labelsSosmed.add("Instagram");
+        labelsSosmed.add("Facebook");
+        labelsSosmed.add("Twitter");
+
+        ArrayAdapter<String> arrayAdapterSosmed = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, labelsSosmed);
+
+        arrayAdapterSosmed.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        sSosmed.setAdapter(arrayAdapterSosmed);
+
+        if(sosmed != null){
+
+            int spinnerPosition = arrayAdapterSosmed.getPosition(sosmed);
+
+            sSosmed.setSelection(spinnerPosition);
+        }
+    }
 
 
     public void showConfirmDialog()
@@ -260,4 +326,33 @@ public class EditActivity extends AppCompatActivity
                         }
                     }
             );
+
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+        status = adapterView.getItemAtPosition(i).toString();
+        if(status == "Select status:"){
+            status = null;
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
+    }
+
+    class SosmedSpinner implements AdapterView.OnItemSelectedListener
+    {
+
+        @Override
+        public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+            sosmed = adapterView.getItemAtPosition(i).toString();
+            if(sosmed == "Select social media:"){
+                sosmed = null;
+            }
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> adapterView) {
+        }
+    }
 }

@@ -188,8 +188,9 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
 
     public void makeCall(String phone_number)
     {
+        String phone = phone_number.replace("62","0");
         Intent intent = new Intent(Intent.ACTION_CALL);
-        intent.setData(Uri.parse("tel:" + phone_number));
+        intent.setData(Uri.parse("tel:" + phone));
         activity.startActivity(intent);
     }
 

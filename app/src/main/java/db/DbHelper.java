@@ -28,6 +28,7 @@ public class DbHelper extends SQLiteOpenHelper {
     private static final String KEY_ADDRESS = "address";
     private static final String KEY_BIRTH_DATE = "birth_date";
     private static final String KEY_SOCIAL_MEDIA = "social_media";
+    private static final String KEY_USERNAME = "username";
 
     private static final String CREATE_TABLE_CONTACTS =
             "CREATE TABLE " + TBL_NAME + "("
@@ -39,7 +40,8 @@ public class DbHelper extends SQLiteOpenHelper {
                     + KEY_STATUS + " TEXT,"
                     + KEY_ADDRESS + " TEXT,"
                     + KEY_BIRTH_DATE + " TEXT,"
-                    + KEY_SOCIAL_MEDIA + " TEXT);";
+                    + KEY_SOCIAL_MEDIA + " TEXT,"
+                    + KEY_USERNAME + " TEXT);";
 
     private static final String SEEDING =
             "INSERT INTO " + TBL_NAME + " (" + KEY_NAME + "," +  KEY_IMAGE
@@ -56,7 +58,7 @@ public class DbHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase sqLiteDatabase)
     {
         sqLiteDatabase.execSQL(CREATE_TABLE_CONTACTS);
-        sqLiteDatabase.execSQL(SEEDING);
+//        sqLiteDatabase.execSQL(SEEDING);
     }
 
     @Override
@@ -87,6 +89,7 @@ public class DbHelper extends SQLiteOpenHelper {
                 contact.setAddress(cursor.getString(cursor.getColumnIndex(KEY_ADDRESS)));
                 contact.setBirth_date(cursor.getString(cursor.getColumnIndex(KEY_BIRTH_DATE)));
                 contact.setSocial_media(cursor.getString(cursor.getColumnIndex(KEY_SOCIAL_MEDIA)));
+                contact.setUsername(cursor.getString(cursor.getColumnIndex(KEY_USERNAME)));
                 contactArrayList.add(contact);
             } while(cursor.moveToNext());
         }
@@ -119,7 +122,7 @@ public class DbHelper extends SQLiteOpenHelper {
     }
 
     public long store(String name, String phone_number, String email, byte[] image,
-          String status, String address, String birth_date, String social_media)
+          String status, String address, String birth_date, String social_media, String username)
     {
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -132,13 +135,14 @@ public class DbHelper extends SQLiteOpenHelper {
         values.put(KEY_ADDRESS, address);
         values.put(KEY_BIRTH_DATE, birth_date);
         values.put(KEY_SOCIAL_MEDIA, social_media);
+        values.put(KEY_USERNAME, username);
 
         long insert = sqLiteDatabase.insert(TBL_NAME, null, values);
         return insert;
     }
 
     public int update(int id, String name, String phone_number, String email, byte[] image,
-                      String status, String address, String birth_date, String social_media)
+                      String status, String address, String birth_date, String social_media, String username)
     {
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -151,6 +155,7 @@ public class DbHelper extends SQLiteOpenHelper {
         values.put(KEY_ADDRESS, address);
         values.put(KEY_BIRTH_DATE, birth_date);
         values.put(KEY_SOCIAL_MEDIA, social_media);
+        values.put(KEY_USERNAME, username);
 
         return sqLiteDatabase.update(TBL_NAME, values, KEY_ID + "= ?",
                 new String[]{String.valueOf(id)});

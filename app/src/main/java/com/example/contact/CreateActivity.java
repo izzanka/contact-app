@@ -11,25 +11,32 @@ import android.os.Bundle;
 import android.telephony.PhoneNumberUtils;
 import android.util.Patterns;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.Toast;
 import com.google.android.material.snackbar.Snackbar;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.regex.Pattern;
 
 import db.DbHelper;
 
-public class CreateActivity extends AppCompatActivity {
+public class CreateActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     DbHelper dbHelper;
     private EditText edtName, edtPhoneNumber, edtEmail, edtStatus, edtAddress, edtBirthDate, edtSocialMedia;
     private ImageView imageView;
     private Button btnSave;
+    private Spinner spinnerStatus, spinnerSosmed;
     byte[] bytes = null;
     Uri imageUri = null;
+    String status = null;
+    String sosmed = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,14 +48,23 @@ public class CreateActivity extends AppCompatActivity {
         edtName = findViewById(R.id.edt_name);
         edtPhoneNumber = findViewById(R.id.edt_phone);
         edtEmail = findViewById(R.id.edt_email);
-        edtStatus = findViewById(R.id.edt_status);
+//        edtStatus = findViewById(R.id.edt_status);
         edtAddress = findViewById(R.id.edt_address);
-        edtBirthDate = findViewById(R.id.edt_birth_date);
+//        edtBirthDate = findViewById(R.id.edt_birth_date);
         edtSocialMedia = findViewById(R.id.edt_social_media);
 
         btnSave = findViewById(R.id.btn_submit);
 
         imageView = findViewById(R.id.imageView);
+
+        spinnerStatus = findViewById(R.id.spinner_status);
+        loadSpinnerStatusData();
+        spinnerStatus.setOnItemSelectedListener(this);
+
+        spinnerSosmed = findViewById(R.id.spinner_sosmed);
+        loadSpinnerSosmedData();
+        spinnerSosmed.setOnItemSelectedListener(new SpinnerSosmed());
+
 
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -56,9 +72,9 @@ public class CreateActivity extends AppCompatActivity {
                 String name = edtName.getText().toString();
                 String phone_number = edtPhoneNumber.getText().toString();
                 String email = edtEmail.getText().toString();
-                String status = edtStatus.getText().toString();
+//                String status = edtStatus.getText().toString();
                 String address = edtAddress.getText().toString();
-                String birth_date = edtBirthDate.getText().toString();
+//                String birth_date = edtBirthDate.getText().toString();
                 String social_media = edtSocialMedia.getText().toString();
 
                 if(!validateName(name) || !validatePhoneNumber(phone_number) || !validateEmail(email)){
@@ -69,8 +85,8 @@ public class CreateActivity extends AppCompatActivity {
                     if(imageUri != null){
                         bytes = getBytes(CreateActivity.this, imageUri);
                     }
-
-                    dbHelper.store(name, phone_number, email, bytes, status, address, birth_date, social_media);
+                    System.out.println(sosmed);
+                    dbHelper.store(name, phone_number, email, bytes, status, address, null, sosmed, social_media);
 
                     Toast.makeText(getApplicationContext(), "Contact created successfully.", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(CreateActivity.this, MainActivity.class);
@@ -134,6 +150,41 @@ public class CreateActivity extends AppCompatActivity {
 
     }
 
+
+    public void loadSpinnerStatusData()
+    {
+        ArrayList labels = new ArrayList();
+        labels.add("Select status:");
+        labels.add("Family");
+        labels.add("Friend");
+        labels.add("Colleague");
+        labels.add("Company");
+        labels.add("Other");
+
+        ArrayAdapter<String> arrayAdapterStatus = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, labels);
+
+        arrayAdapterStatus.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        spinnerStatus.setAdapter(arrayAdapterStatus);
+    }
+
+    public void loadSpinnerSosmedData()
+    {
+        ArrayList labels = new ArrayList();
+        labels.add("Select social media:");
+        labels.add("Instagram");
+        labels.add("Facebook");
+        labels.add("Twitter");
+
+        ArrayAdapter<String> arrayAdapterSosmed = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, labels);
+
+        arrayAdapterSosmed.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        spinnerSosmed.setAdapter(arrayAdapterSosmed);
+    }
+
+
+
     public void chooseImage()
     {
         Intent intent = new Intent();
@@ -187,4 +238,33 @@ public class CreateActivity extends AppCompatActivity {
                         }
                     }
             );
+
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+        status = adapterView.getItemAtPosition(i).toString();
+        if(status == "Select status:"){
+            status = null;
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
+    }
+
+    class SpinnerSosmed implements AdapterView.OnItemSelectedListener
+    {
+
+        @Override
+        public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+            sosmed = adapterView.getItemAtPosition(i).toString();
+            if(sosmed == "Select social media:"){
+                sosmed = null;
+            }
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> adapterView) {
+        }
+    }
 }
